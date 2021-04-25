@@ -16,11 +16,12 @@ jobs:
                 BRANCH=$(echo $destination | awk '{ print $3}')
                 echo $REPO
                 echo $BRANCH
+                #echo 'export BLOB_SHA=$(curl --location --request GET "https://api.github.com/repos/$REPO/contents/.circleci/config.yml?ref=$BRANCH" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json"|jq -r .sha)' >> $BASH_ENV
                 echo 'export BLOB_SHA=$(curl --location --request GET "https://api.github.com/repos/$REPO/contents/.circleci/config.yml?ref=$BRANCH" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json"|jq -r .sha)' >> $BASH_ENV
                 source $BASH_ENV
                 echo $BLOB_SHA
                 
-                curl --location --request PUT "https://api.github.com/repos/$repo/contents/.circleci/config.yml" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json" --data-raw "{\"message\":\"Global config update\", \"content\":\"$GLOBAL_64\", \"sha\":\"${BLOB_SHA}\"}"
+                curl --location --request PUT "https://api.github.com/repos/$repo/contents/.circleci/config.yml" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json" --data-raw "{\"message\":\"Global config update\", \"content\":\"$GLOBAL_64\"}"
               done < "satellites.txt"
       - run:
           name: Get commit info
