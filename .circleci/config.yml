@@ -10,10 +10,10 @@ jobs:
           name: Push global config
           command: |
             echo GLOBAL_64=$(base64 -w 0 global-ci.yml) >> $BASH_ENV
-            while IFS= read -r destination
+            while read -r destination
               do
                 REPO=$(awk '{ print $1}')
-                BRANCH=$(awk '{ print $2}')
+                BRANCH=$(awk '{ print $3}')
                 echo $REPO
                 echo $BRANCH
                 #echo BLOB_SHA=$(curl --location --request GET "https://api.github.com/repos/$REPO/contents/.circleci/config.yml?ref=$BRANCH" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json"|jq -r .sha) >> $BASH_ENV
