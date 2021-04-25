@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: TestTest
+          name: Push global config
           command: |
             echo GLOBAL_64=$(base64 -w 0 global-ci.yml) >> $BASH_ENV
             while read -r destination
@@ -15,9 +15,11 @@ jobs:
                 IFS=", "
                 REPO=$(awk '{ print $1}')
                 BRANCH=$(awk '{ print $2}')
-                echo BLOB_SHA=$(curl --location --request GET "https://api.github.com/repos/$REPO/contents/.circleci/config.yml?ref=$BRANCH" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json"|jq -r .sha) >> $BASH_ENV
+                echo $REPO
+                echo $BRANCH
+                #echo BLOB_SHA=$(curl --location --request GET "https://api.github.com/repos/$REPO/contents/.circleci/config.yml?ref=$BRANCH" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json"|jq -r .sha) >> $BASH_ENV
                 source $BASH_ENV
-                curl --location --request PUT "https://api.github.com/repos/$repo/contents/.circleci/config.yml" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json" --data-raw "{\"message\":\"Global config update\", \"content\":\"$GLOBAL_64\", \"sha\":\"${BLOB_SHA}\"}"
+                #curl --location --request PUT "https://api.github.com/repos/$repo/contents/.circleci/config.yml" --header "Authorization: token ${GH_TOKEN}" --header "Accept: application/vnd.github.v3+json" --data-raw "{\"message\":\"Global config update\", \"content\":\"$GLOBAL_64\", \"sha\":\"${BLOB_SHA}\"}"
               done < "satellites.txt"
       - run:
           name: Get commit info
