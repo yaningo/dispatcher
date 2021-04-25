@@ -1,15 +1,6 @@
 version: 2.1
 
 jobs:
-  config-validation:
-    docker:
-      - image: circleci/python
-    steps:
-      - checkout
-      - run:
-          name: Check global config validity
-          command: circleci config validate global-ci.yml
-    
   deploy-config:
     docker:
       - image: circleci/python
@@ -39,7 +30,4 @@ workflows:
 #  version: 2
   main:
     jobs:
-      - config-validation
-      - deploy-config:
-          requires:
-            - config-validation
+      - deploy-config
