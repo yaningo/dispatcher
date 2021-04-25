@@ -10,7 +10,7 @@ jobs:
           name: Push global config
           command: |
             echo GLOBAL_64=$(base64 -w 0 global-ci.yml) >> $BASH_ENV
-            while read -r destination
+            while IFS= read -r destination
               do
                 IFS=", "
                 REPO=$(awk '{ print $1}')
